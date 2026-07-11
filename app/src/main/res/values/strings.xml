@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HomeSonar</string>
+
+    <!-- Hauptliste -->
+    <string name="empty_state">Noch keine Gegenstände erfasst.\n\nTippe auf die Kamera, um Dinge zu fotografieren und zu speichern.</string>
+    <string name="capture_photo">Foto aufnehmen</string>
+    <string name="action_find">Wo gehört das hin?</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="no_location">Kein Ort hinterlegt</string>
+    <string name="no_items_yet">Noch keine Gegenstände gespeichert — nimm zuerst welche auf.</string>
+    <string name="no_api_key">Kein API-Key hinterlegt. Bitte in den Einstellungen eintragen.</string>
+
+    <!-- Analyse -->
+    <string name="title_analyze">Gegenstände erkennen</string>
+    <string name="analyzing">Foto wird analysiert …</string>
+    <string name="detected_count">%1$d Gegenstände erkannt — auswählen, Ort eintragen, speichern:</string>
+    <string name="nothing_detected">Keine Gegenstände erkannt.</string>
+    <string name="analyze_error">Fehler: %1$s</string>
+    <string name="retry">Erneut</string>
+    <string name="save_selected">Ausgewählte speichern</string>
+    <string name="nothing_selected">Nichts ausgewählt.</string>
+    <string name="saved_count">%1$d Gegenstände gespeichert</string>
+    <string name="name_hint">Name</string>
+    <string name="location_hint">Ort (z. B. Wohnzimmer, Schrank …)</string>
+    <string name="location_hint_long">Ort (z. B. Wohnzimmer, Schrank unten rechts, Schublade)</string>
+    <string name="photo_preview">Fotovorschau</string>
+
+    <!-- Suche -->
+    <string name="title_find">Wo gehört das hin?</string>
+    <string name="finding">Gegenstand wird gesucht …</string>
+    <string name="found">Gefunden:</string>
+    <string name="not_found">Kein Treffer.</string>
+    <string name="unknown_item">Unbekannter Gegenstand</string>
+    <string name="not_found_hint">Dieser Gegenstand ist noch nicht gespeichert.</string>
+    <string name="find_again">Noch einen Gegenstand suchen</string>
+
+    <!-- Bearbeiten -->
+    <string name="edit_item">Gegenstand bearbeiten</string>
+    <string name="delete_item">Gegenstand löschen</string>
+    <string name="delete_item_message">„%1$s“ wirklich löschen?</string>
+    <string name="save">Speichern</string>
+    <string name="delete">Löschen</string>
+    <string name="cancel">Abbrechen</string>
+
+    <!-- Einstellungen -->
+    <string name="title_settings">Einstellungen</string>
+    <string name="provider_label">KI-Anbieter</string>
+    <string name="provider_anthropic">Anthropic (Claude)</string>
+    <string name="provider_openai">OpenAI (GPT)</string>
+    <string name="api_key_label">API-Key</string>
+    <string name="model_label">Modell</string>
+    <string name="model_hint">Standard: claude-opus-4-8 (Anthropic) bzw. gpt-4o-mini (OpenAI). Für günstigere Analysen z. B. claude-haiku-4-5 eintragen.</string>
+    <string name="settings_saved">Einstellungen gespeichert</string>
+    <string name="privacy_note">Hinweis: Fotos werden zur Analyse an den gewählten KI-Anbieter übertragen. Der API-Key wird nur lokal auf diesem Gerät gespeichert.</string>
+</resources>
