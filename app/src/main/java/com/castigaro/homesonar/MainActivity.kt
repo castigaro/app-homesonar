@@ -8,13 +8,16 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.castigaro.homesonar.data.AppSettings
 import com.castigaro.homesonar.data.Item
 import com.castigaro.homesonar.data.ItemStore
+import com.castigaro.homesonar.data.RoomStore
 import com.castigaro.homesonar.databinding.ActivityMainBinding
 import com.castigaro.homesonar.databinding.DialogEditItemBinding
 import com.castigaro.homesonar.util.Photos
+import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
 
@@ -23,6 +26,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ItemAdapter
     private var pendingPhoto: File? = null
+    private var selectedRoom: String? = null // null = alle Räume
+    private var searchQuery: String = ""
 
     private val takePicture = registerForActivityResult(
         ActivityResultContracts.TakePicture()
@@ -34,6 +39,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(
                 Intent(this, AnalyzeActivity::class.java)
                     .putExtra(AnalyzeActivity.EXTRA_PHOTO_PATH, photo.absolutePath)
+                    .putExtra(AnalyzeActivity.EXTRA_ROOM, selectedRoom ?: "")
             )
         } else {
             photo?.delete()
@@ -53,8 +59,8 @@ class MainActivity : AppCompatActivity() {
         binding.itemList.layoutManager = LinearLayoutManager(this)
         binding.itemList.adapter = adapter
 
+        // Aufnehmen geht auch ohne API-Key — dann ohne automatische Erkennung.
         binding.fabCapture.setOnClickListener {
-            if (!requireApiKey()) return@setOnClickListener
             val photo = Photos.newPhotoFile(this)
             pendingPhoto = photo
             takePicture.launch(Photos.uriFor(this, photo))
@@ -63,37 +69,122 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        renderRoomChips()
         refresh()
+        invalidateOptionsMenu()
     }
+
+    // ---- Raum-Filter ----
+
+    private fun renderRoomChips() {
+        val group = binding.roomChips
+        group.removeAllViews()
+
+        val rooms = RoomStore.getAll(this)
+        if (selectedRoom != null && selectedRoom !in rooms) selectedRoom = null
+
+        fun addChip(label: String, room: String?): Chip {
+            val chip = Chip(this)
+            chip.text = label
+            chip.isCheckable = true
+            chip.isChecked = selectedRoom == room
+            chip.setOnClickListener {
+                selectedRoom = room
+                renderRoomChips()
+                refresh()
+            }
+            group.addView(chip)
+            return chip
+        }
+
+        addChip(getString(R.string.all_rooms), null)
+        rooms.forEach { room ->
+            val chip = addChip(room, room)
+            chip.setOnLongClickListener { confirmDeleteRoom(room); true }
+        }
+
+        val addChipView = Chip(this)
+        addChipView.text = getString(R.string.add_room)
+        addChipView.isCheckable = false
+        addChipView.setOnClickListener { showAddRoomDialog() }
+        group.addView(addChipView)
+    }
+
+    private fun showAddRoomDialog() {
+        val input = android.widget.EditText(this).apply {
+            hint = getString(R.string.room_name_hint)
+            setSingleLine()
+        }
+        val container = android.widget.FrameLayout(this).apply {
+            setPadding(48, 16, 48, 0)
+            addView(input)
+        }
+        AlertDialog.Builder(this)
+            .setTitle(R.string.add_room_title)
+            .setView(container)
+            .setPositiveButton(R.string.save) { _, _ ->
+                val name = input.text.toString().trim()
+                if (RoomStore.add(this, name)) {
+                    selectedRoom = name
+                    renderRoomChips()
+                    refresh()
+                }
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun confirmDeleteRoom(room: String) {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.delete_room)
+            .setMessage(getString(R.string.delete_room_message, room))
+            .setPositiveButton(R.string.delete) { _, _ ->
+                RoomStore.delete(this, room)
+                if (selectedRoom == room) selectedRoom = null
+                renderRoomChips()
+                refresh()
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    // ---- Liste & Suche ----
 
     private fun refresh() {
-        val items = ItemStore.getAll(this)
+        var items = ItemStore.getAll(this)
+        selectedRoom?.let { room -> items = items.filter { it.room == room } }
+        if (searchQuery.isNotBlank()) {
+            val q = searchQuery.trim()
+            items = items.filter {
+                it.name.contains(q, ignoreCase = true) ||
+                    it.location.contains(q, ignoreCase = true) ||
+                    it.room.contains(q, ignoreCase = true)
+            }
+        }
         adapter.submit(items)
+        binding.emptyState.setText(
+            if (searchQuery.isNotBlank() || selectedRoom != null) R.string.empty_filtered
+            else R.string.empty_state
+        )
         binding.emptyState.visibility =
             if (items.isEmpty()) View.VISIBLE else View.GONE
-    }
-
-    private fun requireApiKey(): Boolean {
-        if (AppSettings.isConfigured(this)) return true
-        Snackbar.make(binding.root, R.string.no_api_key, Snackbar.LENGTH_LONG)
-            .setAction(R.string.action_settings) {
-                startActivity(Intent(this, SettingsActivity::class.java))
-            }
-            .show()
-        return false
     }
 
     private fun showEditDialog(item: Item) {
         val dialogBinding = DialogEditItemBinding.inflate(layoutInflater)
         dialogBinding.inputName.setText(item.name)
         dialogBinding.inputLocation.setText(item.location)
+        dialogBinding.inputRoom.setText(item.room)
         AlertDialog.Builder(this)
             .setTitle(R.string.edit_item)
             .setView(dialogBinding.root)
             .setPositiveButton(R.string.save) { _, _ ->
                 item.name = dialogBinding.inputName.text.toString().trim()
                 item.location = dialogBinding.inputLocation.text.toString().trim()
+                item.room = dialogBinding.inputRoom.text.toString().trim()
+                if (item.room.isNotBlank()) RoomStore.add(this, item.room)
                 ItemStore.update(this, item)
+                renderRoomChips()
                 refresh()
             }
             .setNegativeButton(R.string.cancel, null)
@@ -112,20 +203,60 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
+    // ---- Menü ----
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        val searchView = menu.findItem(R.id.action_search).actionView as SearchView
+        searchView.queryHint = getString(R.string.search_hint)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = false
+            override fun onQueryTextChange(newText: String?): Boolean {
+                searchQuery = newText ?: ""
+                refresh()
+                return true
+            }
+        })
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val unanalyzed = ItemStore.getAll(this).count { !it.analyzed && it.photoPath != null }
+        val indexItem = menu.findItem(R.id.action_index)
+        indexItem.isVisible = unanalyzed > 0
+        indexItem.title = getString(R.string.action_index, unanalyzed)
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_find -> {
-            if (requireApiKey()) {
-                if (ItemStore.getAll(this).isEmpty()) {
-                    Snackbar.make(binding.root, R.string.no_items_yet, Snackbar.LENGTH_LONG).show()
-                } else {
-                    startActivity(Intent(this, FindActivity::class.java))
-                }
+            if (!AppSettings.isConfigured(this)) {
+                Snackbar.make(binding.root, R.string.find_needs_key, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.action_settings) {
+                        startActivity(Intent(this, SettingsActivity::class.java))
+                    }
+                    .show()
+            } else if (ItemStore.getAll(this).isEmpty()) {
+                Snackbar.make(binding.root, R.string.no_items_yet, Snackbar.LENGTH_LONG).show()
+            } else {
+                startActivity(Intent(this, FindActivity::class.java))
             }
+            true
+        }
+        R.id.action_index -> {
+            if (!AppSettings.isConfigured(this)) {
+                Snackbar.make(binding.root, R.string.index_needs_key, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.action_settings) {
+                        startActivity(Intent(this, SettingsActivity::class.java))
+                    }
+                    .show()
+            } else {
+                startActivity(Intent(this, IndexActivity::class.java))
+            }
+            true
+        }
+        R.id.action_help -> {
+            startActivity(Intent(this, HelpActivity::class.java))
             true
         }
         R.id.action_settings -> {

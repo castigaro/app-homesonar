@@ -30,10 +30,15 @@ class ItemAdapter(
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val item = items[position]
-        holder.binding.itemName.text = item.name
-        holder.binding.itemLocation.text = item.location.ifBlank {
-            holder.binding.root.context.getString(R.string.no_location)
-        }
+        val context = holder.binding.root.context
+        holder.binding.itemName.text =
+            if (item.analyzed) item.name
+            else context.getString(R.string.name_unindexed, item.name)
+        val place = listOf(item.room, item.location)
+            .filter { it.isNotBlank() }
+            .joinToString(" · ")
+        holder.binding.itemLocation.text =
+            place.ifBlank { context.getString(R.string.no_location) }
 
         val photo = item.photoPath?.let { File(it) }
         if (photo != null && photo.exists()) {

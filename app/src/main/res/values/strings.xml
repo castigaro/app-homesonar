@@ -52,5 +52,47 @@
     <string name="model_label">Modell</string>
     <string name="model_hint">Standard: claude-opus-4-8 (Anthropic) bzw. gpt-4o-mini (OpenAI). Für günstigere Analysen z. B. claude-haiku-4-5 eintragen.</string>
     <string name="settings_saved">Einstellungen gespeichert</string>
+
+    <!-- Suche & Räume -->
+    <string name="action_search">Suchen</string>
+    <string name="search_hint">Name, Ort oder Raum …</string>
+    <string name="empty_filtered">Keine Treffer für diese Auswahl.</string>
+    <string name="all_rooms">Alle</string>
+    <string name="add_room">+ Raum</string>
+    <string name="add_room_title">Raum anlegen</string>
+    <string name="room_name_hint">Raum (z. B. Wohnzimmer)</string>
+    <string name="delete_room">Raum löschen</string>
+    <string name="delete_room_message">„%1$s“ aus der Raumliste entfernen? Gespeicherte Gegenstände behalten ihre Raum-Angabe.</string>
+    <string name="room_subtitle">Raum: %1$s</string>
+
+    <!-- Offline-Modus & Indizierung -->
+    <string name="offline_capture_hint">Kein API-Key hinterlegt — das Foto wird ohne Erkennung gespeichert. Name und Ort kannst du selbst eintragen; später lässt sich das Foto über „Fotos indizieren“ nachträglich analysieren.</string>
+    <string name="analyze_error_offline">Analyse fehlgeschlagen (%1$s). Du kannst den Eintrag manuell speichern — das Foto bleibt für „Fotos indizieren“ vorgemerkt.</string>
+    <string name="unnamed_item">Unbenannt</string>
+    <string name="name_unindexed">%1$s (nicht indiziert)</string>
+    <string name="find_needs_key">Die Fotosuche braucht einen API-Key. Ohne Key kannst du die Textsuche (Lupe) nutzen.</string>
+    <string name="index_needs_key">Zum Indizieren bitte zuerst einen API-Key hinterlegen.</string>
+    <string name="title_index">Fotos indizieren</string>
+    <string name="action_index">Fotos indizieren (%1$d)</string>
+    <string name="index_pending">%1$d Fotos wurden noch nicht analysiert.</string>
+    <string name="index_start">Indizierung starten</string>
+    <string name="index_progress">Analysiere Foto %1$d von %2$d …</string>
+    <string name="index_log_ok">✓ Erkannt: %1$s</string>
+    <string name="index_log_error">✗ Fehler: %1$s — Indizierung angehalten.</string>
+    <string name="index_done">Fertig: %1$d Fotos indiziert, %2$d neue Gegenstände angelegt.</string>
+
+    <!-- Hilfe -->
+    <string name="title_help">Hilfe</string>
+    <string name="action_help">Hilfe</string>
+    <string name="help_capture_title">Gegenstände erfassen</string>
+    <string name="help_capture_body">Tippe auf den Kamera-Knopf und fotografiere Dinge, die du dir merken willst. Mit hinterlegtem API-Key erkennt die KI die Gegenstände automatisch — du wählst aus, passt Namen an und trägst zu jedem den Ort ein (z. B. „Schrank unten rechts, Schublade“). Tipp auf einen Eintrag in der Liste öffnet ihn zum Bearbeiten, langes Drücken löscht ihn.</string>
+    <string name="help_rooms_title">Räume</string>
+    <string name="help_rooms_body">Über „+ Raum“ legst du Räume an (z. B. Wohnzimmer, Keller). Ist ein Raum ausgewählt, zeigt die Liste nur diesen Raum — und neue Fotos werden direkt diesem Raum zugeordnet. Langes Drücken auf einen Raum-Chip entfernt den Raum aus der Liste.</string>
+    <string name="help_find_title">Wiederfinden</string>
+    <string name="help_find_body">Die Lupe durchsucht deine Einträge nach Name, Ort und Raum — das funktioniert immer, auch ohne API-Key. Mit API-Key gibt es zusätzlich die Fotosuche (Kamera-Symbol oben): Gegenstand fotografieren, und die App zeigt, wo er hingehört.</string>
+    <string name="help_offline_title">Ohne API-Key</string>
+    <string name="help_offline_body">Auch ohne Key kannst du fotografieren und Einträge anlegen — die automatische Erkennung entfällt dann, und die Fotos werden als „nicht indiziert“ markiert. Sobald du einen Key hinterlegst, erscheint im Menü „Fotos indizieren“: Damit werden alle unanalysierten Fotos nachträglich von der KI ausgewertet.</string>
+    <string name="help_key_title">API-Key</string>
+    <string name="help_key_body">In den Einstellungen wählst du Anthropic (Claude) oder OpenAI (GPT) und trägst deinen API-Key ein. Der Key wird nur lokal auf dem Gerät gespeichert; Fotos werden ausschließlich zur Analyse an den gewählten Anbieter übertragen. Das Modell ist frei wählbar — z. B. claude-haiku-4-5 für günstigere Analysen.</string>
     <string name="privacy_note">Hinweis: Fotos werden zur Analyse an den gewählten KI-Anbieter übertragen. Der API-Key wird nur lokal auf diesem Gerät gespeichert.</string>
 </resources>
