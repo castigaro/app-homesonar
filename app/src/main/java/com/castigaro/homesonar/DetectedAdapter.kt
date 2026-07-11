@@ -8,9 +8,12 @@ import com.castigaro.homesonar.databinding.RowDetectedBinding
 
 /**
  * Liste der erkannten Gegenstände: pro Zeile Checkbox, editierbarer Name
- * und editierbarer Ort.
+ * und editierbarer Ort. [locationSuggestions] liefert Autovervollständigung
+ * aus den bereits verwendeten Orten.
  */
-class DetectedAdapter : RecyclerView.Adapter<DetectedAdapter.Holder>() {
+class DetectedAdapter(
+    private val locationSuggestions: List<String> = emptyList(),
+) : RecyclerView.Adapter<DetectedAdapter.Holder>() {
 
     data class Entry(var name: String, var location: String = "", var checked: Boolean = true)
 
@@ -27,8 +30,19 @@ class DetectedAdapter : RecyclerView.Adapter<DetectedAdapter.Holder>() {
 
     class Holder(val binding: RowDetectedBinding) : RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder =
-        Holder(RowDetectedBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+        val holder = Holder(
+            RowDetectedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
+        holder.binding.inputLocation.setAdapter(
+            android.widget.ArrayAdapter(
+                parent.context,
+                android.R.layout.simple_dropdown_item_1line,
+                locationSuggestions,
+            )
+        )
+        return holder
+    }
 
     override fun getItemCount(): Int = entries.size
 

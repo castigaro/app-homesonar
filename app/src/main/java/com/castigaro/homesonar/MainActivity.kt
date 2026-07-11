@@ -173,8 +173,24 @@ class MainActivity : AppCompatActivity() {
     private fun showEditDialog(item: Item) {
         val dialogBinding = DialogEditItemBinding.inflate(layoutInflater)
         dialogBinding.inputName.setText(item.name)
-        dialogBinding.inputLocation.setText(item.location)
-        dialogBinding.inputRoom.setText(item.room)
+        // setText(..., false) verhindert, dass das Dropdown beim Vorbefüllen aufklappt.
+        dialogBinding.inputLocation.setText(item.location, false)
+        dialogBinding.inputRoom.setText(item.room, false)
+
+        dialogBinding.inputRoom.setAdapter(
+            android.widget.ArrayAdapter(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                RoomStore.getAll(this),
+            )
+        )
+        dialogBinding.inputLocation.setAdapter(
+            android.widget.ArrayAdapter(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                knownLocations(),
+            )
+        )
         AlertDialog.Builder(this)
             .setTitle(R.string.edit_item)
             .setView(dialogBinding.root)
@@ -190,6 +206,14 @@ class MainActivity : AppCompatActivity() {
             .setNegativeButton(R.string.cancel, null)
             .show()
     }
+
+    /** Alle bisher verwendeten Orte (dedupliziert) als Vorschlagsliste. */
+    private fun knownLocations(): List<String> =
+        ItemStore.getAll(this)
+            .map { it.location.trim() }
+            .filter { it.isNotEmpty() }
+            .distinctBy { it.lowercase() }
+            .sorted()
 
     private fun confirmDelete(item: Item) {
         AlertDialog.Builder(this)

@@ -22,12 +22,13 @@
         android:inputType="text"
         android:maxLines="1" />
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
         android:id="@+id/inputLocation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_weight="1"
+        android:completionThreshold="1"
         android:hint="@string/location_hint"
         android:importantForAutofill="no"
         android:inputType="text"

@@ -52,7 +52,12 @@ class AnalyzeActivity : AppCompatActivity() {
 
         binding.photoPreview.setImageBitmap(BitmapFactory.decodeFile(photo.absolutePath))
 
-        adapter = DetectedAdapter()
+        val locationSuggestions = ItemStore.getAll(this)
+            .map { it.location.trim() }
+            .filter { it.isNotEmpty() }
+            .distinctBy { it.lowercase() }
+            .sorted()
+        adapter = DetectedAdapter(locationSuggestions)
         binding.detectedList.layoutManager = LinearLayoutManager(this)
         binding.detectedList.adapter = adapter
 
