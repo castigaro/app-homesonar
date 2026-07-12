@@ -11,8 +11,8 @@ android {
         applicationId = "com.castigaro.homesonar"
         minSdk = 26
         targetSdk = 34
-        versionCode = 6
-        versionName = "1.5.0"
+        versionCode = 7
+        versionName = "1.5.1"
     }
 
     // Keystore und Passwort kommen aus GitHub-Secrets (siehe build-homesonar.yml).
@@ -58,6 +58,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":common"))
+
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")

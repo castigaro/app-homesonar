@@ -7,10 +7,9 @@
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
+        style="@style/Widget.AppSonar.Toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/toolbar_bg"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:title="@string/title_analyze" />
 
     <ImageView

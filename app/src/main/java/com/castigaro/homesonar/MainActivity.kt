@@ -1,18 +1,17 @@
 package com.castigaro.homesonar
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.castigaro.common.update.UpdateChecker
+import com.castigaro.common.update.UpdateUi
 import com.castigaro.homesonar.data.AppSettings
 import com.castigaro.homesonar.data.Item
 import com.castigaro.homesonar.data.ItemStore
@@ -20,10 +19,8 @@ import com.castigaro.homesonar.data.RoomStore
 import com.castigaro.homesonar.databinding.ActivityMainBinding
 import com.castigaro.homesonar.databinding.DialogEditItemBinding
 import com.castigaro.homesonar.util.Photos
-import com.castigaro.homesonar.util.UpdateChecker
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +30,8 @@ class MainActivity : AppCompatActivity() {
     private var pendingPhoto: File? = null
     private var selectedRoom: String? = null // null = alle Räume
     private var searchQuery: String = ""
+
+    private val updateChecker = UpdateChecker(VERSION_URL, BuildConfig.VERSION_CODE)
 
     private val takePicture = registerForActivityResult(
         ActivityResultContracts.TakePicture()
@@ -72,9 +71,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Stille Prüfung beim Start — zeigt nur etwas, wenn wirklich eine neue Version da ist.
-        lifecycleScope.launch {
-            UpdateChecker.check()?.let { showUpdateSnackbar(it) }
-        }
+        UpdateUi.checkSilently(this, binding.root, updateChecker)
     }
 
     override fun onResume() {
@@ -243,31 +240,6 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    // ---- Update-Prüfung ----
-
-    private fun showUpdateSnackbar(info: UpdateChecker.UpdateInfo) {
-        Snackbar.make(
-            binding.root,
-            getString(R.string.update_available, info.versionName),
-            Snackbar.LENGTH_INDEFINITE,
-        )
-            .setAction(R.string.update_download) {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(info.apkUrl)))
-            }
-            .show()
-    }
-
-    private fun checkForUpdateManually() {
-        lifecycleScope.launch {
-            val info = UpdateChecker.check()
-            if (info != null) {
-                showUpdateSnackbar(info)
-            } else {
-                Toast.makeText(this@MainActivity, R.string.update_up_to_date, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
     // ---- Menü ----
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -325,7 +297,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
         R.id.action_check_update -> {
-            checkForUpdateManually()
+            UpdateUi.checkManually(this, binding.root, updateChecker)
             true
         }
         R.id.action_settings -> {
@@ -333,5 +305,9 @@ class MainActivity : AppCompatActivity() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        private const val VERSION_URL = "https://appsonar.de/downloads/homesonar-version.json"
     }
 }

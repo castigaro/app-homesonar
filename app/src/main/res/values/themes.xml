@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.HomeSonar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryVariant">@color/primary_dark</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/secondary</item>
-    </style>
+    <!-- Farben kommen aus dem gemeinsamen Theme.AppSonar (common/android);
+         die eigene Palette liefert values/colors.xml bzw. values-night/. -->
+    <style name="Theme.HomeSonar" parent="Theme.AppSonar" />
 
     <style name="HelpHeading">
         <item name="android:layout_width">wrap_content</item>
