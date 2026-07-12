@@ -81,19 +81,31 @@ object VisionApi {
         }
 
     private fun requestVision(context: Context, photo: File, prompt: String): String {
-        val apiKey = AppSettings.getApiKey(context)
-        if (apiKey.isBlank()) throw ApiException("Kein API-Key hinterlegt.")
-        val model = AppSettings.getModel(context)
+        val config = AppSettings.activeConfig(context)
+            ?: throw ApiException("Kein aktiver API-Key — in den Einstellungen hinterlegen oder aktivieren.")
         val imageBase64 = com.castigaro.homesonar.util.Photos.toBase64(photo)
 
-        return if (AppSettings.getProvider(context) == AppSettings.PROVIDER_OPENAI) {
-            requestOpenAi(apiKey, model, imageBase64, prompt)
+        return if (config.provider == AppSettings.PROVIDER_OPENAI) {
+            requestOpenAi(context, config.apiKey, config.model, imageBase64, prompt)
         } else {
-            requestAnthropic(apiKey, model, imageBase64, prompt)
+            requestAnthropic(context, config.apiKey, config.model, imageBase64, prompt)
         }
     }
 
+    /** Bucht die geschätzten Kosten eines Aufrufs auf den Zähler des Anbieters. */
+    private fun trackCost(
+        context: Context,
+        provider: String,
+        model: String,
+        inputTokens: Long,
+        outputTokens: Long,
+    ) {
+        val micros = ModelPricing.estimateCostMicros(provider, model, inputTokens, outputTokens)
+        AppSettings.addCostMicros(context, provider, micros)
+    }
+
     private fun requestAnthropic(
+        context: Context,
         apiKey: String,
         model: String,
         imageBase64: String,
@@ -134,6 +146,13 @@ object VisionApi {
                 throw ApiException(apiErrorMessage(responseText, response.code))
             }
             val json = JSONObject(responseText)
+            json.optJSONObject("usage")?.let { usage ->
+                trackCost(
+                    context, AppSettings.PROVIDER_ANTHROPIC, model,
+                    inputTokens = usage.optLong("input_tokens", 0L),
+                    outputTokens = usage.optLong("output_tokens", 0L),
+                )
+            }
             if (json.optString("stop_reason") == "refusal") {
                 throw ApiException("Die Anfrage wurde vom Modell abgelehnt.")
             }
@@ -149,6 +168,7 @@ object VisionApi {
     }
 
     private fun requestOpenAi(
+        context: Context,
         apiKey: String,
         model: String,
         imageBase64: String,
@@ -185,7 +205,15 @@ object VisionApi {
             if (!response.isSuccessful) {
                 throw ApiException(apiErrorMessage(responseText, response.code))
             }
-            return JSONObject(responseText)
+            val json = JSONObject(responseText)
+            json.optJSONObject("usage")?.let { usage ->
+                trackCost(
+                    context, AppSettings.PROVIDER_OPENAI, model,
+                    inputTokens = usage.optLong("prompt_tokens", 0L),
+                    outputTokens = usage.optLong("completion_tokens", 0L),
+                )
+            }
+            return json
                 .getJSONArray("choices").getJSONObject(0)
                 .getJSONObject("message").getString("content")
         }

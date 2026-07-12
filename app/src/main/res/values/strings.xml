@@ -50,11 +50,23 @@
     <!-- Einstellungen -->
     <string name="title_settings">Einstellungen</string>
     <string name="provider_label">KI-Anbieter</string>
+    <string name="provider_choose_label">KI-Anbieter wählen</string>
+    <string name="primary_provider_label">Primärer Anbieter</string>
     <string name="provider_anthropic">Anthropic (Claude)</string>
     <string name="provider_openai">OpenAI (GPT)</string>
     <string name="api_key_label">API-Key</string>
     <string name="model_label">Modell</string>
-    <string name="model_hint">Standard: claude-opus-4-8 (Anthropic) bzw. gpt-4o-mini (OpenAI). Für günstigere Analysen z. B. claude-haiku-4-5 eintragen.</string>
+    <string name="model_hint">Modell aus der Liste wählen oder eine eigene Modell-ID eintippen. Standard: claude-sonnet-5 (Anthropic) bzw. gpt-4o-mini (OpenAI).</string>
+    <string name="key_enabled">Key aktiv</string>
+    <string name="key_delete">Key löschen</string>
+    <string name="key_deleted">Key gelöscht</string>
+    <string name="key_register_anthropic">Noch keinen API-Key? Bei Anthropic registrieren →</string>
+    <string name="key_register_openai">Noch keinen API-Key? Bei OpenAI registrieren →</string>
+    <string name="add_second_provider">Zweiten Anbieter einrichten: %1$s</string>
+    <string name="api_costs">Bisherige KI-Kosten: ~%1$s $</string>
+    <string name="api_costs_reset">Zurücksetzen</string>
+    <string name="api_costs_reset_done">Kostenzähler zurückgesetzt</string>
+    <string name="api_costs_disclaimer">Der Kostenzähler ist ein unverbindlicher Schätzwert: Er wird aus den Token-Zahlen der API-Antworten mit einer festen, in dieser App-Version hinterlegten Preistabelle berechnet. Abweichungen von den tatsächlichen Kosten sind möglich (z. B. durch Preisänderungen, Rabatte oder Rundung). Verbindlich ist allein die Abrechnung im Konto des jeweiligen Anbieters.</string>
     <string name="settings_saved">Einstellungen gespeichert</string>
 
     <!-- Suche & Räume -->
@@ -97,7 +109,9 @@
     <string name="help_offline_title">Ohne API-Key</string>
     <string name="help_offline_body">Auch ohne Key kannst du fotografieren und Einträge anlegen — die automatische Erkennung entfällt dann, und die Fotos werden als „nicht indiziert“ markiert. Sobald du einen Key hinterlegst, erscheint im Menü „Fotos indizieren“: Damit werden alle unanalysierten Fotos nachträglich von der KI ausgewertet.</string>
     <string name="help_key_title">API-Key</string>
-    <string name="help_key_body">In den Einstellungen wählst du Anthropic (Claude) oder OpenAI (GPT) und trägst deinen API-Key ein. Der Key wird nur lokal auf dem Gerät gespeichert; Fotos werden ausschließlich zur Analyse an den gewählten Anbieter übertragen. Das Modell ist frei wählbar — z. B. claude-haiku-4-5 für günstigere Analysen.</string>
+    <string name="help_key_body">In den Einstellungen wählst du zuerst deinen KI-Anbieter — Anthropic (Claude) oder OpenAI (GPT) — und trägst dessen API-Key ein (ein Link führt zur Registrierung, falls du noch keinen hast). Der Key wird nur lokal auf dem Gerät gespeichert; Fotos werden ausschließlich zur Analyse an den gewählten Anbieter übertragen. Das Modell wählst du aus einer Liste oder trägst eine eigene Modell-ID ein — Standard ist claude-sonnet-5, günstiger geht z. B. claude-haiku-4-5. Über den Schalter „Key aktiv“ pausierst du die KI-Funktionen vorübergehend (etwa bei leerem Guthaben), ohne den Key zu löschen. Hinterlegst du Keys beider Anbieter, bestimmt „Primärer Anbieter“, welcher genutzt wird — der andere ruht.</string>
+    <string name="help_costs_title">KI-Kosten</string>
+    <string name="help_costs_body">Zu jedem Key zeigen die Einstellungen einen laufenden Kostenzähler für Bilderkennung und Fotosuche. Das ist ein unverbindlicher Schätzwert: Die App rechnet die Token-Zahlen der API-Antworten mit einer festen Preistabelle um, die dem Stand dieser App-Version entspricht. Preisänderungen der Anbieter, Rabatte oder Rundungen können zu Abweichungen führen — verbindlich ist allein die Abrechnung in deinem Konto beim jeweiligen Anbieter. Der Zähler lässt sich jederzeit zurücksetzen und wird beim Löschen des Keys automatisch genullt.</string>
     <string name="privacy_note">Hinweis: Fotos werden zur Analyse an den gewählten KI-Anbieter übertragen. Der API-Key wird nur lokal auf diesem Gerät gespeichert.</string>
 
     <!-- Die Strings der Update-Prüfung kommen aus common/android. -->
