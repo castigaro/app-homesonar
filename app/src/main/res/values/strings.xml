@@ -99,4 +99,10 @@
     <string name="help_key_title">API-Key</string>
     <string name="help_key_body">In den Einstellungen wählst du Anthropic (Claude) oder OpenAI (GPT) und trägst deinen API-Key ein. Der Key wird nur lokal auf dem Gerät gespeichert; Fotos werden ausschließlich zur Analyse an den gewählten Anbieter übertragen. Das Modell ist frei wählbar — z. B. claude-haiku-4-5 für günstigere Analysen.</string>
     <string name="privacy_note">Hinweis: Fotos werden zur Analyse an den gewählten KI-Anbieter übertragen. Der API-Key wird nur lokal auf diesem Gerät gespeichert.</string>
+
+    <!-- Update-Prüfung -->
+    <string name="action_check_update">Nach Update suchen</string>
+    <string name="update_available">Neue Version %1$s verfügbar</string>
+    <string name="update_download">Herunterladen</string>
+    <string name="update_up_to_date">Du hast bereits die neueste Version.</string>
 </resources>
