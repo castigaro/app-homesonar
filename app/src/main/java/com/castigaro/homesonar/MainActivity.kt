@@ -14,7 +14,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.castigaro.common.update.UpdateChecker
 import com.castigaro.common.update.UpdateUi
-import com.castigaro.homesonar.data.AppSettings
+import com.castigaro.common.llm.ProviderSettings
 import com.castigaro.homesonar.data.Item
 import com.castigaro.homesonar.data.ItemStore
 import com.castigaro.homesonar.data.RoomStore
@@ -311,7 +311,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_find -> {
-            if (!AppSettings.isConfigured(this)) {
+            if (!ProviderSettings.isConfigured(this)) {
                 Snackbar.make(binding.root, R.string.find_needs_key, Snackbar.LENGTH_LONG)
                     .setAction(R.string.action_settings) {
                         startActivity(Intent(this, SettingsActivity::class.java))
@@ -325,7 +325,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
         R.id.action_index -> {
-            if (!AppSettings.isConfigured(this)) {
+            if (!ProviderSettings.isConfigured(this)) {
                 Snackbar.make(binding.root, R.string.index_needs_key, Snackbar.LENGTH_LONG)
                     .setAction(R.string.action_settings) {
                         startActivity(Intent(this, SettingsActivity::class.java))

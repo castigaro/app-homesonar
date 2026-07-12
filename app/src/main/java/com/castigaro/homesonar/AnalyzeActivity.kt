@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.castigaro.homesonar.api.VisionApi
-import com.castigaro.homesonar.data.AppSettings
+import com.castigaro.common.llm.ProviderSettings
 import com.castigaro.homesonar.data.Item
 import com.castigaro.homesonar.data.ItemStore
 import com.castigaro.homesonar.data.RoomStore
@@ -72,7 +72,7 @@ class AnalyzeActivity : AppCompatActivity() {
         binding.buttonSave.setOnClickListener { saveSelected() }
         binding.buttonRetry.setOnClickListener { analyze() }
 
-        if (AppSettings.isConfigured(this)) {
+        if (ProviderSettings.isConfigured(this)) {
             analyze()
         } else {
             setUpOfflineEntry()

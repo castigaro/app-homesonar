@@ -1,7 +1,8 @@
 package com.castigaro.homesonar.api
 
 import android.content.Context
-import com.castigaro.homesonar.data.AppSettings
+import com.castigaro.common.llm.ModelPricing
+import com.castigaro.common.llm.ProviderSettings
 import com.castigaro.homesonar.data.Item
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -81,11 +82,11 @@ object VisionApi {
         }
 
     private fun requestVision(context: Context, photo: File, prompt: String): String {
-        val config = AppSettings.activeConfig(context)
+        val config = ProviderSettings.activeConfig(context)
             ?: throw ApiException("Kein aktiver API-Key — in den Einstellungen hinterlegen oder aktivieren.")
         val imageBase64 = com.castigaro.homesonar.util.Photos.toBase64(photo)
 
-        return if (config.provider == AppSettings.PROVIDER_OPENAI) {
+        return if (config.provider == ProviderSettings.PROVIDER_OPENAI) {
             requestOpenAi(context, config.apiKey, config.model, imageBase64, prompt)
         } else {
             requestAnthropic(context, config.apiKey, config.model, imageBase64, prompt)
@@ -101,7 +102,7 @@ object VisionApi {
         outputTokens: Long,
     ) {
         val micros = ModelPricing.estimateCostMicros(provider, model, inputTokens, outputTokens)
-        AppSettings.addCostMicros(context, provider, micros)
+        ProviderSettings.addCostMicros(context, provider, micros)
     }
 
     private fun requestAnthropic(
@@ -148,7 +149,7 @@ object VisionApi {
             val json = JSONObject(responseText)
             json.optJSONObject("usage")?.let { usage ->
                 trackCost(
-                    context, AppSettings.PROVIDER_ANTHROPIC, model,
+                    context, ProviderSettings.PROVIDER_ANTHROPIC, model,
                     inputTokens = usage.optLong("input_tokens", 0L),
                     outputTokens = usage.optLong("output_tokens", 0L),
                 )
@@ -208,7 +209,7 @@ object VisionApi {
             val json = JSONObject(responseText)
             json.optJSONObject("usage")?.let { usage ->
                 trackCost(
-                    context, AppSettings.PROVIDER_OPENAI, model,
+                    context, ProviderSettings.PROVIDER_OPENAI, model,
                     inputTokens = usage.optLong("prompt_tokens", 0L),
                     outputTokens = usage.optLong("completion_tokens", 0L),
                 )
