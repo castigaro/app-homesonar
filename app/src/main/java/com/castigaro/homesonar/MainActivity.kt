@@ -1,10 +1,12 @@
 package com.castigaro.homesonar
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -180,6 +182,8 @@ class MainActivity : AppCompatActivity() {
     private fun showEditDialog(item: Item) {
         val dialogBinding = DialogEditItemBinding.inflate(layoutInflater)
 
+        bindEditPhoto(item, dialogBinding)
+
         dialogBinding.inputRoom.setAdapter(
             android.widget.ArrayAdapter(
                 this,
@@ -218,6 +222,46 @@ class MainActivity : AppCompatActivity() {
             dialogBinding.inputLocation.setText(item.location, false)
         }
         dialog.show()
+    }
+
+    /**
+     * Zeigt das Foto des Gegenstands im Bearbeiten-Dialog (zoombar) und
+     * verdrahtet "Ausschnitt speichern": Der sichtbare Ausschnitt wird als
+     * neue Fotodatei nur für diesen Gegenstand gespeichert — das Original
+     * bleibt für andere Gegenstände derselben Aufnahme erhalten.
+     */
+    private fun bindEditPhoto(item: Item, dialogBinding: DialogEditItemBinding) {
+        val photoFile = item.photoPath?.let(::File)?.takeIf { it.exists() }
+        val bitmap = photoFile?.let { BitmapFactory.decodeFile(it.absolutePath) }
+        if (bitmap == null) {
+            dialogBinding.itemPhoto.visibility = View.GONE
+            dialogBinding.photoActions.visibility = View.GONE
+            return
+        }
+
+        dialogBinding.itemPhoto.setImageBitmap(bitmap)
+        dialogBinding.buttonSaveCrop.isEnabled = false
+        dialogBinding.itemPhoto.onZoomChanged = { zoomed ->
+            dialogBinding.buttonSaveCrop.isEnabled = zoomed
+        }
+
+        dialogBinding.buttonSaveCrop.setOnClickListener {
+            val rect = dialogBinding.itemPhoto.visibleSourceRect() ?: return@setOnClickListener
+            val oldPath = item.photoPath ?: return@setOnClickListener
+            val newFile = Photos.cropToNewFile(this, oldPath, rect)
+            if (newFile == null) {
+                Toast.makeText(this, R.string.crop_failed, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            item.photoPath = newFile.absolutePath
+            ItemStore.update(this, item)
+            ItemStore.deletePhotoIfOrphaned(this, oldPath)
+            dialogBinding.itemPhoto.setImageBitmap(
+                BitmapFactory.decodeFile(newFile.absolutePath)
+            )
+            refresh()
+            Toast.makeText(this, R.string.crop_saved, Toast.LENGTH_SHORT).show()
+        }
     }
 
     /** Alle bisher verwendeten Orte (dedupliziert) als Vorschlagsliste. */

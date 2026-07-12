@@ -3,6 +3,7 @@ package com.castigaro.homesonar.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Rect
 import android.net.Uri
 import android.util.Base64
 import androidx.core.content.FileProvider
@@ -59,4 +60,34 @@ object Photos {
 
     fun toBase64(file: File): String =
         Base64.encodeToString(file.readBytes(), Base64.NO_WRAP)
+
+    /**
+     * Speichert den Ausschnitt [rect] (Bitmap-Pixelkoordinaten) von
+     * [sourcePath] als neue Fotodatei. Die Quelldatei bleibt unverändert —
+     * andere Gegenstände können sie weiter referenzieren.
+     */
+    fun cropToNewFile(context: Context, sourcePath: String, rect: Rect): File? {
+        val source = BitmapFactory.decodeFile(sourcePath) ?: return null
+        val bounds = Rect(rect)
+        if (!bounds.intersect(0, 0, source.width, source.height) ||
+            bounds.width() < 16 || bounds.height() < 16
+        ) {
+            source.recycle()
+            return null
+        }
+        val crop = Bitmap.createBitmap(source, bounds.left, bounds.top, bounds.width(), bounds.height())
+        val file = newPhotoFile(context)
+        val ok = runCatching {
+            FileOutputStream(file).use { out ->
+                crop.compress(Bitmap.CompressFormat.JPEG, JPEG_QUALITY, out)
+            }
+        }.isSuccess
+        if (crop !== source) crop.recycle()
+        source.recycle()
+        if (!ok) {
+            runCatching { file.delete() }
+            return null
+        }
+        return file
+    }
 }

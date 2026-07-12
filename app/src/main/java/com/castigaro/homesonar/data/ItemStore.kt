@@ -56,9 +56,16 @@ object ItemStore {
         val list = load(context)
         list.removeAll { it.id == item.id }
         save(context)
-        // Foto nur löschen, wenn kein anderer Gegenstand es referenziert.
-        val path = item.photoPath ?: return
-        if (list.none { it.photoPath == path }) {
+        deletePhotoIfOrphaned(context, item.photoPath)
+    }
+
+    /**
+     * Löscht eine Fotodatei, wenn kein Gegenstand sie (mehr) referenziert —
+     * mehrere Gegenstände aus einer Analyse teilen sich dieselbe Datei.
+     */
+    fun deletePhotoIfOrphaned(context: Context, path: String?) {
+        if (path == null) return
+        if (load(context).none { it.photoPath == path }) {
             runCatching { File(path).delete() }
         }
     }

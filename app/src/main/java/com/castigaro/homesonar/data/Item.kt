@@ -8,7 +8,7 @@ data class Item(
     var name: String,
     var location: String,
     var room: String = "",
-    val photoPath: String?,
+    var photoPath: String?,
     /** false = Foto wurde noch nicht von der KI analysiert (Offline-Aufnahme). */
     var analyzed: Boolean = true,
     val createdAt: Long = System.currentTimeMillis(),

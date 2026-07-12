@@ -41,6 +41,11 @@
 
     <!-- Bearbeiten -->
     <string name="edit_item">Gegenstand bearbeiten</string>
+    <string name="item_photo_desc">Foto des Gegenstands</string>
+    <string name="photo_zoom_hint">Mit zwei Fingern zoomen</string>
+    <string name="crop_save">Ausschnitt speichern</string>
+    <string name="crop_saved">Ausschnitt als Foto gespeichert</string>
+    <string name="crop_failed">Ausschnitt konnte nicht gespeichert werden.</string>
     <string name="delete_item">Gegenstand löschen</string>
     <string name="delete_item_message">„%1$s“ wirklich löschen?</string>
     <string name="save">Speichern</string>
