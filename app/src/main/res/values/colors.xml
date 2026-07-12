@@ -5,4 +5,6 @@
     <color name="secondary">#4FA58F</color>
     <color name="white">#FFFFFF</color>
     <color name="ic_launcher_background">#1F6E5C</color>
+    <!-- Feste Toolbar-Farbe (im Dark-Mode überschrieben). -->
+    <color name="toolbar_bg">#1F6E5C</color>
 </resources>

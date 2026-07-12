@@ -3,6 +3,7 @@ package com.castigaro.homesonar
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +33,6 @@ class AnalyzeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAnalyzeBinding
     private lateinit var adapter: DetectedAdapter
     private lateinit var photo: File
-    private var room: String = ""
     private var analyzedByAi = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,12 +45,20 @@ class AnalyzeActivity : AppCompatActivity() {
         val path = intent.getStringExtra(EXTRA_PHOTO_PATH)
         if (path == null) { finish(); return }
         photo = File(path)
-        room = intent.getStringExtra(EXTRA_ROOM) ?: ""
-        if (room.isNotBlank()) {
-            supportActionBar?.subtitle = getString(R.string.room_subtitle, room)
-        }
 
         binding.photoPreview.setImageBitmap(BitmapFactory.decodeFile(photo.absolutePath))
+
+        // Raum-Feld: vorbelegt mit dem gewählten Filter-Raum, frei änderbar,
+        // mit Vorschlägen aus den vorhandenen Räumen.
+        val presetRoom = intent.getStringExtra(EXTRA_ROOM) ?: ""
+        binding.inputRoom.setAdapter(
+            ArrayAdapter(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                RoomStore.getAll(this),
+            )
+        )
+        if (presetRoom.isNotBlank()) binding.inputRoom.setText(presetRoom, false)
 
         val locationSuggestions = ItemStore.getAll(this)
             .map { it.location.trim() }
@@ -97,8 +105,9 @@ class AnalyzeActivity : AppCompatActivity() {
                     binding.buttonSave.isEnabled = true
                     binding.buttonRetry.visibility = View.VISIBLE
                 } else {
-                    binding.statusText.text =
-                        getString(R.string.detected_count, objects.size)
+                    binding.statusText.text = resources.getQuantityString(
+                        R.plurals.detected_count, objects.size, objects.size
+                    )
                     adapter.submit(objects.map { it.name })
                     binding.buttonSave.isEnabled = true
                 }
@@ -115,29 +124,18 @@ class AnalyzeActivity : AppCompatActivity() {
     }
 
     private fun saveSelected() {
+        val room = binding.inputRoom.text.toString().trim()
         val selected = adapter.getSelected()
-        if (selected.isEmpty()) {
-            // Ohne Namen trotzdem erlauben: das Foto wird als unbenannter
-            // Eintrag abgelegt und kann später indiziert werden.
-            ItemStore.add(
-                this,
-                Item(
-                    name = getString(R.string.unnamed_item),
-                    location = "",
-                    room = room,
-                    photoPath = photo.absolutePath,
-                    analyzed = analyzedByAi,
-                )
-            )
-            Snackbar.make(binding.root, getString(R.string.saved_count, 1), Snackbar.LENGTH_SHORT).show()
-            finish()
-            return
+
+        val entries = selected.ifEmpty {
+            // Ohne Namen trotzdem erlauben: unbenannter Eintrag, später indizierbar.
+            listOf(DetectedAdapter.Entry(name = getString(R.string.unnamed_item)))
         }
-        selected.forEach { entry ->
+        entries.forEach { entry ->
             ItemStore.add(
                 this,
                 Item(
-                    name = entry.name,
+                    name = entry.name.ifBlank { getString(R.string.unnamed_item) },
                     location = entry.location,
                     room = room,
                     photoPath = photo.absolutePath,
@@ -145,8 +143,11 @@ class AnalyzeActivity : AppCompatActivity() {
                 )
             )
         }
-        if (room.isNotBlank()) RoomStore.add(this, room)
-        Snackbar.make(binding.root, getString(R.string.saved_count, selected.size), Snackbar.LENGTH_SHORT).show()
+
+        // Neu eingegebenen Raum anlegen, damit er als Filter-Chip erscheint.
+        if (room.isNotBlank() && RoomStore.add(this, room)) {
+            Snackbar.make(binding.root, getString(R.string.room_created, room), Snackbar.LENGTH_SHORT).show()
+        }
         finish()
     }
 

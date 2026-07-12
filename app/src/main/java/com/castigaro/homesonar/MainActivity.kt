@@ -172,10 +172,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showEditDialog(item: Item) {
         val dialogBinding = DialogEditItemBinding.inflate(layoutInflater)
-        dialogBinding.inputName.setText(item.name)
-        // setText(..., false) verhindert, dass das Dropdown beim Vorbefüllen aufklappt.
-        dialogBinding.inputLocation.setText(item.location, false)
-        dialogBinding.inputRoom.setText(item.room, false)
 
         dialogBinding.inputRoom.setAdapter(
             android.widget.ArrayAdapter(
@@ -191,7 +187,8 @@ class MainActivity : AppCompatActivity() {
                 knownLocations(),
             )
         )
-        AlertDialog.Builder(this)
+
+        val dialog = AlertDialog.Builder(this)
             .setTitle(R.string.edit_item)
             .setView(dialogBinding.root)
             .setPositiveButton(R.string.save) { _, _ ->
@@ -204,7 +201,16 @@ class MainActivity : AppCompatActivity() {
                 refresh()
             }
             .setNegativeButton(R.string.cancel, null)
-            .show()
+            .create()
+
+        // Vorbelegen erst nach dem Anzeigen: nur so hebt das Material-Feld
+        // sein schwebendes Label zuverlässig über den vorbefüllten Text.
+        dialog.setOnShowListener {
+            dialogBinding.inputName.setText(item.name)
+            dialogBinding.inputRoom.setText(item.room, false)
+            dialogBinding.inputLocation.setText(item.location, false)
+        }
+        dialog.show()
     }
 
     /** Alle bisher verwendeten Orte (dedupliziert) als Vorschlagsliste. */

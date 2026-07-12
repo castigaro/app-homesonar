@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Helleres Grün für Akzente (Dialog-Buttons, Chips, Links), damit sie
+         auf dunklem Untergrund gut lesbar sind. -->
+    <color name="primary">#6FC8AE</color>
+    <color name="primary_dark">#4FA58F</color>
+    <color name="secondary">#6FC8AE</color>
+    <!-- Toolbar bleibt dunkel, damit der weiße Titel darauf gut lesbar ist. -->
+    <color name="toolbar_bg">#123F34</color>
+</resources>

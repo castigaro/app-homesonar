@@ -14,7 +14,11 @@
     <!-- Analyse -->
     <string name="title_analyze">Gegenstände erkennen</string>
     <string name="analyzing">Foto wird analysiert …</string>
-    <string name="detected_count">%1$d Gegenstände erkannt — auswählen, Ort eintragen, speichern:</string>
+    <plurals name="detected_count">
+        <item quantity="one">1 Gegenstand erkannt — auswählen, Ort eintragen, speichern:</item>
+        <item quantity="other">%1$d Gegenstände erkannt — auswählen, Ort eintragen, speichern:</item>
+    </plurals>
+    <string name="room_created">Raum „%1$s“ angelegt</string>
     <string name="nothing_detected">Keine Gegenstände erkannt.</string>
     <string name="analyze_error">Fehler: %1$s</string>
     <string name="retry">Erneut</string>
@@ -87,7 +91,7 @@
     <string name="help_capture_title">Gegenstände erfassen</string>
     <string name="help_capture_body">Tippe auf den Kamera-Knopf und fotografiere Dinge, die du dir merken willst. Mit hinterlegtem API-Key erkennt die KI die Gegenstände automatisch — du wählst aus, passt Namen an und trägst zu jedem den Ort ein (z. B. „Schrank unten rechts, Schublade“). Tipp auf einen Eintrag in der Liste öffnet ihn zum Bearbeiten, langes Drücken löscht ihn.</string>
     <string name="help_rooms_title">Räume</string>
-    <string name="help_rooms_body">Über „+ Raum“ legst du Räume an (z. B. Wohnzimmer, Keller). Ist ein Raum ausgewählt, zeigt die Liste nur diesen Raum — und neue Fotos werden direkt diesem Raum zugeordnet. Langes Drücken auf einen Raum-Chip entfernt den Raum aus der Liste.</string>
+    <string name="help_rooms_body">Über „+ Raum“ legst du Räume an (z. B. Wohnzimmer, Keller). Ist ein Raum ausgewählt, zeigt die Liste nur diesen Raum — und neue Fotos werden direkt diesem Raum zugeordnet. Beim Erfassen kannst du den Raum im Feld oben auch ändern oder einen neuen eintippen; er wird automatisch angelegt und erscheint danach als Chip. Tippen ab dem ersten Buchstaben schlägt vorhandene Räume vor. Langes Drücken auf einen Raum-Chip entfernt den Raum aus der Liste.</string>
     <string name="help_find_title">Wiederfinden</string>
     <string name="help_find_body">Die Lupe durchsucht deine Einträge nach Name, Ort und Raum — das funktioniert immer, auch ohne API-Key. Mit API-Key gibt es zusätzlich die Fotosuche (Kamera-Symbol oben): Gegenstand fotografieren, und die App zeigt, wo er hingehört.</string>
     <string name="help_offline_title">Ohne API-Key</string>
