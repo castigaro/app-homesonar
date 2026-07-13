@@ -13,6 +13,11 @@ object ItemStore {
 
     private var items: MutableList<Item>? = null
 
+    /** Nur für Tests: verwirft den In-Memory-Cache, erzwingt Neuladen. */
+    internal fun resetForTest() {
+        items = null
+    }
+
     private fun file(context: Context): File = File(context.filesDir, "items.json")
 
     private fun load(context: Context): MutableList<Item> {

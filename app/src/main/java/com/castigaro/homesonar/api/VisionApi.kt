@@ -233,7 +233,7 @@ object VisionApi {
     }
 
     /** Zieht das JSON-Objekt aus der Modellantwort (toleriert ```-Zäune und Fließtext). */
-    private fun extractJson(text: String): JSONObject {
+    internal fun extractJson(text: String): JSONObject {
         val start = text.indexOf('{')
         val end = text.lastIndexOf('}')
         if (start < 0 || end <= start) throw ApiException("Antwort nicht lesbar: $text")
