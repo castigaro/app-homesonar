@@ -32,5 +32,5 @@ und später per Foto wiederfinden („Wo gehört das hin?“).
 ## Build
 
 `./gradlew assembleDebug` in diesem Verzeichnis, oder in Android Studio
-öffnen. Der CI-Workflow `build-homesonar.yml` baut signierte APKs in das
-GitHub-Release `homesonar-latest`.
+öffnen. Der CI-Workflow `build.yml` baut signierte APKs in das
+GitHub-Release `latest`.
