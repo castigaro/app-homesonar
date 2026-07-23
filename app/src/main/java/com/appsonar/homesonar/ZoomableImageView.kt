@@ -1,4 +1,4 @@
-package com.castigaro.homesonar
+package com.appsonar.homesonar
 
 import android.content.Context
 import android.graphics.Bitmap

@@ -1,11 +1,11 @@
-package com.castigaro.homesonar
+package com.appsonar.homesonar
 
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.castigaro.homesonar.data.Item
-import com.castigaro.homesonar.databinding.RowItemBinding
+import com.appsonar.homesonar.data.Item
+import com.appsonar.homesonar.databinding.RowItemBinding
 import java.io.File
 
 class ItemAdapter(

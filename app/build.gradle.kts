@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "com.castigaro.homesonar"
+    namespace = "com.appsonar.homesonar"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.castigaro.homesonar"
+        applicationId = "com.appsonar.homesonar"
         minSdk = 26
         targetSdk = 34
-        versionCode = 13
-        versionName = "1.7.3"
+        versionCode = 14
+        versionName = "1.8.0"
     }
 
     // Keystore und Passwort kommen aus GitHub-Secrets (siehe build.yml).
@@ -24,7 +24,7 @@ android {
         create("release") {
             storeFile = releaseKeystore
             storePassword = releaseStorePassword
-            keyAlias = "markdownviewer"
+            keyAlias = "appsonar"
             keyPassword = releaseStorePassword
         }
     }

@@ -1,4 +1,4 @@
-package com.castigaro.homesonar
+package com.appsonar.homesonar
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -6,10 +6,10 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.castigaro.homesonar.api.VisionApi
-import com.castigaro.homesonar.data.ItemStore
-import com.castigaro.homesonar.databinding.ActivityFindBinding
-import com.castigaro.homesonar.util.Photos
+import com.appsonar.homesonar.api.VisionApi
+import com.appsonar.homesonar.data.ItemStore
+import com.appsonar.homesonar.databinding.ActivityFindBinding
+import com.appsonar.homesonar.util.Photos
 import kotlinx.coroutines.launch
 import java.io.File
 

@@ -1,10 +1,10 @@
-package com.castigaro.homesonar
+package com.appsonar.homesonar
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
-import com.castigaro.homesonar.databinding.RowDetectedBinding
+import com.appsonar.homesonar.databinding.RowDetectedBinding
 
 /**
  * Liste der erkannten Gegenstände: pro Zeile Checkbox, editierbarer Name

@@ -9,7 +9,7 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <com.castigaro.homesonar.ZoomableImageView
+        <com.appsonar.homesonar.ZoomableImageView
             android:id="@+id/itemPhoto"
             android:layout_width="match_parent"
             android:layout_height="220dp"

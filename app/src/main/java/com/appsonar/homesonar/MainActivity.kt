@@ -1,4 +1,4 @@
-package com.castigaro.homesonar
+package com.appsonar.homesonar
 
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -12,15 +12,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.castigaro.common.update.UpdateChecker
-import com.castigaro.common.update.UpdateUi
-import com.castigaro.common.llm.ProviderSettings
-import com.castigaro.homesonar.data.Item
-import com.castigaro.homesonar.data.ItemStore
-import com.castigaro.homesonar.data.RoomStore
-import com.castigaro.homesonar.databinding.ActivityMainBinding
-import com.castigaro.homesonar.databinding.DialogEditItemBinding
-import com.castigaro.homesonar.util.Photos
+import com.appsonar.common.update.UpdateChecker
+import com.appsonar.common.update.UpdateUi
+import com.appsonar.common.llm.ProviderSettings
+import com.appsonar.homesonar.data.Item
+import com.appsonar.homesonar.data.ItemStore
+import com.appsonar.homesonar.data.RoomStore
+import com.appsonar.homesonar.databinding.ActivityMainBinding
+import com.appsonar.homesonar.databinding.DialogEditItemBinding
+import com.appsonar.homesonar.util.Photos
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
@@ -352,6 +352,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val VERSION_URL = "https://github.com/castigaro/app-homesonar/releases/download/latest/homesonar-version.json"
+        private const val VERSION_URL = "https://github.com/appsonar/app-homesonar/releases/download/latest/homesonar-version.json"
     }
 }

@@ -1,9 +1,9 @@
-package com.castigaro.homesonar.api
+package com.appsonar.homesonar.api
 
 import android.content.Context
-import com.castigaro.common.llm.ModelPricing
-import com.castigaro.common.llm.ProviderSettings
-import com.castigaro.homesonar.data.Item
+import com.appsonar.common.llm.ModelPricing
+import com.appsonar.common.llm.ProviderSettings
+import com.appsonar.homesonar.data.Item
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
@@ -84,7 +84,7 @@ object VisionApi {
     private fun requestVision(context: Context, photo: File, prompt: String): String {
         val config = ProviderSettings.activeConfig(context)
             ?: throw ApiException("Kein aktiver API-Key — in den Einstellungen hinterlegen oder aktivieren.")
-        val imageBase64 = com.castigaro.homesonar.util.Photos.toBase64(photo)
+        val imageBase64 = com.appsonar.homesonar.util.Photos.toBase64(photo)
 
         return if (config.provider == ProviderSettings.PROVIDER_OPENAI) {
             requestOpenAi(context, config.apiKey, config.model, imageBase64, prompt)

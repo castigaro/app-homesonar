@@ -1,4 +1,4 @@
-package com.castigaro.homesonar.data
+package com.appsonar.homesonar.data
 
 import android.content.Context
 import org.json.JSONArray

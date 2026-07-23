@@ -1,4 +1,4 @@
-package com.castigaro.homesonar.api
+package com.appsonar.homesonar.api
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows

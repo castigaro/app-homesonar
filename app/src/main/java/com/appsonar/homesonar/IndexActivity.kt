@@ -1,13 +1,13 @@
-package com.castigaro.homesonar
+package com.appsonar.homesonar
 
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.castigaro.homesonar.api.VisionApi
-import com.castigaro.homesonar.data.Item
-import com.castigaro.homesonar.data.ItemStore
-import com.castigaro.homesonar.databinding.ActivityIndexBinding
+import com.appsonar.homesonar.api.VisionApi
+import com.appsonar.homesonar.data.Item
+import com.appsonar.homesonar.data.ItemStore
+import com.appsonar.homesonar.databinding.ActivityIndexBinding
 import kotlinx.coroutines.launch
 import java.io.File
 

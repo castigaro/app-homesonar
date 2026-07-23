@@ -1,4 +1,4 @@
-package com.castigaro.homesonar.data
+package com.appsonar.homesonar.data
 
 import org.json.JSONObject
 import java.util.UUID

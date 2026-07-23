@@ -1,8 +1,8 @@
-package com.castigaro.homesonar
+package com.appsonar.homesonar
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.castigaro.homesonar.databinding.ActivityHelpBinding
+import com.appsonar.homesonar.databinding.ActivityHelpBinding
 
 class HelpActivity : AppCompatActivity() {
 
