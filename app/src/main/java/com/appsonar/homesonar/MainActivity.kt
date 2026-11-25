@@ -352,6 +352,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val VERSION_URL = "https://github.com/appsonar/app-homesonar/releases/download/latest/homesonar-version.json"
+        private const val VERSION_URL = "https://github.com/castigaro/app-homesonar/releases/download/latest/homesonar-version.json"
     }
 }
